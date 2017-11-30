@@ -27,14 +27,60 @@ https://downloads.cloudera.com/demo_vm/virtualbox/cloudera-quickstart-vm-5.8.0-0
 You can use a file of your own or download a book from the gutenberg project, you find also the example 
 file dataset/hamlet.txt
 
-2. Modify the implementation to return only the words that start with the letter 'm'.
+Mapper
+
+```
+@Override
+public void map(LongWritable key, Text value, Mapper.Context context) throws IOException, InterruptedException {
+        String line = value.toString();
+        StringTokenizer tokenizer = new StringTokenizer(line);
+        while(tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            word.set(token);
+            context.write(word, one);
+        }
+}
+```
+
+Reducer
+
+```
+@Override
+public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+    int i=0;
+    while (values.iterator().hasNext()) {
+        i+=values.iterator().next().get();
+    }
+    context.write(key, new IntWritable(i));
+}
+```
+
+1. Modify the implementation to return only the words that start with the letter 'm'.
 
 - Where did you change it, in the mapper or in the reducer ?
+
+  I changed it in the mapper.
+
 - What are the consequences of changing the code in each one ?
+
+  The size that will be outputed differs. The bottleneck of Hadoop being the disk write, it has consequences on performance.
+
 - Compare the Hadoop counters and explain which one is the best strategy.
 
+  Reducer modification
+
+  		Map input records=7062
+  		Map output records=33579
+  		Map output bytes=317907
+  Mapper modification
+
+  	Map input records=7062
+  	Map output records=1835
+  	Map output bytes=16725
+  	
+
 3. Use the GDELT dataset and Implement a Map Reduce job the top 10 countries that have more
-relevance in the news for a given time period (one week, one day, one month).
+  relevance in the news for a given time period (one week, one day, one month).
 
 For more info about gdelt column format you can find more info at:
 http://data.gdeltproject.org/documentation/GDELT-Data_Format_Codebook.pdf
@@ -79,7 +125,7 @@ Linux
 Windows
 
 - Download PuTTY.exe to your computer from:
-http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
+  http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 - Start PuTTY.
 - In the Category list, click Session.
 - In the Host Name field, type hadoop@ec2-IP.eu-west-1.compute.amazonaws.com
@@ -116,11 +162,11 @@ depending on your master and group (##).
 Upload the file
 
     hadoop fs -put LICENSE.txt hdfs://172.17.0.2:9000/tp/
-    
+
 Verify the upload
 
     hadoop fs -ls hdfs://172.17.0.2:9000/tp/
-    
+
 This one for remote IPs (port 8020 or 9000)
 
     hadoop fs -ls hdfs://172.17.0.2/tp1/
@@ -141,7 +187,7 @@ The structure is:
     hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples*.jar wordcount hdfs://172.17.0.2:9000/tp1/LICENSE.txt hdfs://172.17.0.2:9000/tp1/output/$(date +%Y%m%d%H%M%S)
 
     hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples*.jar wordcount hdfs://172.17.0.2:9000/tp1/LICENSE.txt hdfs://172.17.0.2:9000/tp1/output
-     
+
 Verify the output
 
     hadoop fs -cat "hdfs://172.17.0.2:9000/tp1/output/part-*"
