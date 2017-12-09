@@ -8,13 +8,17 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public class WordCount {
+public class ReligionCount {
 
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
-        Job job = Job.getInstance(conf, "hamlet"); job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class); job.setMapperClass(WordCountMapper.class);
-        job.setReducerClass(WordCountReducer.class); job.setJarByClass(WordCount.class);
+
+        conf.set("filter", "month");
+        conf.setInt("filterValue", 5);
+
+        Job job = Job.getInstance(conf, "gdelt"); job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class); job.setMapperClass(ReligionCountMapper.class);
+        job.setReducerClass(ReligionCountReducer.class); job.setJarByClass(ReligionCount.class);
         job.setInputFormatClass(TextInputFormat.class); job.setOutputFormatClass(TextOutputFormat.class);
         FileInputFormat.addInputPath(job, new Path(args[0])); FileOutputFormat.setOutputPath(job, new Path(args[1]));
         job.waitForCompletion(true);
