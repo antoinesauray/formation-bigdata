@@ -10,12 +10,10 @@ public class MyReducer extends org.apache.hadoop.mapreduce.Reducer<Text, IntWrit
 
     @Override
     public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-        //if(key.charAt(0) == 'm') {
-            int i=0;
-            while (values.iterator().hasNext()) {
-                i+=values.iterator().next().get();
-            }
-            context.write(key, new IntWritable(i));
-       // }
+        int i=0;
+        while (values.iterator().hasNext()) {
+            i+=values.iterator().next().get();
+        }
+        context.write(key, new IntWritable(i));
     }
 }
