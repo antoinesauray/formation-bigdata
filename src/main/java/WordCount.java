@@ -12,6 +12,16 @@ public class WordCount {
 
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
+
+        // conf.set("filter", "M");
+        // conf.setInt("filterValue", 5);
+
+        // conf.set("filter", "W");
+        // conf.setInt("filterValue", 19);
+
+        conf.set("filter", "D");
+        conf.setInt("filterValue", 15);
+
         Job job = Job.getInstance(conf, "gdelt"); job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class); job.setMapperClass(MyMapper.class);
         job.setReducerClass(MyReducer.class); job.setJarByClass(WordCount.class);
@@ -19,5 +29,4 @@ public class WordCount {
         FileInputFormat.addInputPath(job, new Path(args[0])); FileOutputFormat.setOutputPath(job, new Path(args[1]));
         job.waitForCompletion(true);
     }
-
 }

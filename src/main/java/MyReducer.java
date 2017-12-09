@@ -9,7 +9,7 @@ import java.io.IOException;
 public class MyReducer extends org.apache.hadoop.mapreduce.Reducer<Text, IntWritable, Text, IntWritable> {
 
     @Override
-    public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<IntWritable> values, MyReducer.Context context) throws IOException, InterruptedException {
         int i=0;
         while (values.iterator().hasNext()) {
             i+=values.iterator().next().get();
