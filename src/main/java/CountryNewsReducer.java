@@ -10,7 +10,21 @@ import java.util.*;
  */
 public class CountryNewsReducer extends org.apache.hadoop.mapreduce.Reducer<Text, IntWritable, Text, IntWritable> {
 
-    private Map<String, Pair<String, Integer>> map;
+    private class MyPair implements Comparable<MyPair> {
+        private String key;
+        private Integer value;
+        MyPair(String key, Integer value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public int compareTo(MyPair o) {
+            return value.compareTo(o.value);
+        }
+    }
+
+    private Map<String, MyPair> map;
 
 
     protected void setup(Context context)
@@ -27,29 +41,26 @@ public class CountryNewsReducer extends org.apache.hadoop.mapreduce.Reducer<Text
             i+=values.iterator().next().get();
             count++;
         }
-        map.put(key.toString(), new Pair<>(key.toString(), i));
+        map.put(key.toString(), new MyPair(key.toString(), i));
     }
 
+
+    /*
     protected void cleanup(Context context)
             throws IOException,
             InterruptedException {
 
-        List<Pair<String, Integer>> list = new ArrayList<>(map.size());
+        List<MyPair> list = new ArrayList<>(map.size());
         for(String key : map.keySet()) {
             list.add(map.get(key));
         }
+        Collections.sort(list);
 
-        list.sort(new Comparator<Pair<String, Integer>>() {
-            @Override
-            public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
-                return o1.getValue().compareTo(o2.getValue());
-            }
-        });
         int beg = list.size()-10;
         if(beg < 0) beg=0;
-        for(Pair<String, Integer> p: list.subList(beg, list.size())) {
-            context.write(new Text(p.getKey()), new IntWritable(p.getValue()));
+        for(MyPair p: list.subList(beg, list.size())) {
+            context.write(new Text(p.key), new IntWritable(p.value));
         }
-
     }
+    */
 }

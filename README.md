@@ -24,7 +24,7 @@ https://downloads.cloudera.com/demo_vm/virtualbox/cloudera-quickstart-vm-5.8.0-0
 
 1. Finish the implementation of Wordcount as seen in the class and validate that it works well.
 
-You can use a file of your own or download a book from the gutenberg project, you find also the example 
+You can use a file of your own or download a book from the gutenberg project, you find also the example
 file dataset/hamlet.txt
 
 Mapper
@@ -77,7 +77,7 @@ public void reduce(Text key, Iterable<IntWritable> values, Context context) thro
   	Map input records=7062
   	Map output records=1835
   	Map output bytes=16725
-  	
+
 
 3. Use the GDELT dataset and Implement a Map Reduce job the top 10 countries that have more
   relevance in the news for a given time period (one week, one day, one month).
@@ -92,18 +92,22 @@ You can also download the full datasets from:
 http://data.gdeltproject.org/events/index.html
 
 We will consider the country code as the three letter identifier represented as Actor1CountryCode, we
-will count the relevance of an event based on its NumMentions column. So this become likes a
-WordCount where we count the NumMentions of each event per country to determine the Top 20. 
+will count the relevance of an eent based on its NumMentions column. So this become likes a
+WordCount where we count the NumMentions of each event per country to determine the Top 20.
 
 Add a combiner to the job? Do you see any improvement in the counters ? Explain.
 
-4. Do an interesting analysis from the GDELT dataset.
+The combiner will reduce the number of counters. It is an optimization.
 
+4. Do an interesting analysis from the GDELT dataset.
+Ó
 Take a look at the code book format, in particular the Actor/CAMEO codes, and find interesting analysis, some ideas:
 
-- Compare the number of news for a given pair of actors, do you remark some bias.
-- Compare religions, is news reporting biased for certain religions (see tone).
-- How much influence had some actor vs another (in pure count terms).
+Done on the small dataset
+
+It seems that CHR gets a lower tone on average (-1.463528) than MOS (-1.2605042). BUD is best (1.6203706)
+
+CHR have a lot of mentions in the small dataset(232). The MOS only has 1, therefore the low tone (-1.2605042) can be ignored. BUD has 40.
 
 # Some instructions
 

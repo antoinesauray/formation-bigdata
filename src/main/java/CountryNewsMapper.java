@@ -44,7 +44,8 @@ public class CountryNewsMapper extends Mapper<LongWritable, Text, Text, IntWrita
         word.set(countryCode);
         one.set(Integer.parseInt(numMentions));
 
-
+        context.write(word, one);
+        /*
         if(filter != null) {
             if(filter.equals("month") && month == Integer.parseInt(filterValue)) {
                 context.write(word, one);
@@ -56,6 +57,7 @@ public class CountryNewsMapper extends Mapper<LongWritable, Text, Text, IntWrita
                 context.write(word, one);
             }
         } else { context.write(word, one); }
+        */
 
     }
 }

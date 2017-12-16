@@ -13,8 +13,10 @@ public class CountryNews {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
 
+        /*
         conf.set("filter", "month");
         conf.setInt("filterValue", 5);
+        */
 
         Job job = Job.getInstance(conf, "gdelt"); job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class); job.setMapperClass(CountryNewsMapper.class);
